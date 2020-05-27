@@ -69,10 +69,12 @@ and open the template in the editor.
     );
 #$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
    ###############################################################
+   
     $data = json_encode($data_array);
     $url = 'http://advanse.lirmm.fr:5000/predict';
-    
+   echo "start here..1"; 
    $curl = curl_init();
+   echo "start here..---1.1";
    curl_setopt($curl, CURLOPT_POST, 1);
    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
    curl_setopt($curl, CURLOPT_URL, $url);
@@ -80,9 +82,11 @@ and open the template in the editor.
       'APIKEY: 111111111111111111111',
       'Content-Type: application/json',
    ));
+   echo "start here..2";
    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
    // EXECUTE:
+   echo "start here..3";
    $result = curl_exec($curl);
    echo $result;
    if(!$result){die("Connection Failure");}
