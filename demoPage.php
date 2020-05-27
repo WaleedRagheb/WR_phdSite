@@ -67,7 +67,27 @@ and open the template in the editor.
     $data_array =  array(
       "data"        => "MY MACHINE Rockstar should make freemode events that are car shows. When you enter the area, your car can't be blown uo. Everyone who participates could vote on the best car. Winner could earn RP and like 25k. It would be dope",
     );
-$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
+#$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
+   ###############################################################
+    $data = json_encode($data_array);
+    $url = 'http://advanse.lirmm.fr:5000/predict';
+    
+   $curl = curl_init();
+   curl_setopt($curl, CURLOPT_POST, 1);
+   curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+   curl_setopt($curl, CURLOPT_URL, $url);
+   curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      'APIKEY: 111111111111111111111',
+      'Content-Type: application/json',
+   ));
+   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+   // EXECUTE:
+   $result = curl_exec($curl);
+   echo $result;
+   if(!$result){die("Connection Failure");}
+   curl_close($curl);
+    #############################################################
 $response = json_decode($make_call, true);
 $errors   = $response['response']['errors'];
 $data     = $response['response']['data'][0];
