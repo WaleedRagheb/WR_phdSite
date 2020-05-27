@@ -78,8 +78,11 @@
           <h1 class="text-uppercase font-weight-bold text-center">Don't Do it!</h1>
           <h4 class="text-center">At-risk users behaviors modeling on social networks </h4>
           <a class="btn btn-primary" href="#projectMore" role="button">Learn more about our project</a>
+          <br>
+          <a class="btn btn-primary" href="./demoPage.php" role="button">Project Demo</a>
         </div>
       </div>
+      
     </section>
 
     <!-- The second element displays informations about your project -->
