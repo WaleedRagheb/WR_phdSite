@@ -59,12 +59,13 @@ and open the template in the editor.
    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
    // EXECUTE:
    $result = curl_exec($curl);
+   echo $result;
    if(!$result){die("Connection Failure");}
    curl_close($curl);
    return $result;
  }
     $data_array =  array(
-      "text_s"        => "Rockstar should make freemode events that are car shows. When you enter the area, your car can't be blown uo. Everyone who participates could vote on the best car. Winner could earn RP and like 25k. It would be dope",
+      "data"        => "MY MACHINE Rockstar should make freemode events that are car shows. When you enter the area, your car can't be blown uo. Everyone who participates could vote on the best car. Winner could earn RP and like 25k. It would be dope",
     );
 $make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
 $response = json_decode($make_call, true);
