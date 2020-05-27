@@ -32,29 +32,49 @@ and open the template in the editor.
         <?php
         // put your code here
         
-            $article = new stdClass();
-            $article->title = "An example article";
-            $article->summary = "An example of posting JSON encoded data to a web service";
+ function callAPI($method, $url, $data){
+   $curl = curl_init();
+   switch ($method){
+      case "POST":
+         curl_setopt($curl, CURLOPT_POST, 1);
+         if ($data)
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+         break;
+      case "PUT":
+         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+         if ($data)
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);			 					
+         break;
+      default:
+         if ($data)
+            $url = sprintf("%s?%s", $url, http_build_query($data));
+   }
+   // OPTIONS:
+   curl_setopt($curl, CURLOPT_URL, $url);
+   curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      'APIKEY: 111111111111111111111',
+      'Content-Type: application/json',
+   ));
+   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+   // EXECUTE:
+   $result = curl_exec($curl);
+   if(!$result){die("Connection Failure");}
+   curl_close($curl);
+   return $result;
+ }
+    $data_array =  array(
+      "text_s"        => "Rockstar should make freemode events that are car shows. When you enter the area, your car can't be blown uo. Everyone who participates could vote on the best car. Winner could earn RP and like 25k. It would be dope",
+    );
+$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
+$response = json_decode($make_call, true);
+$errors   = $response['response']['errors'];
+$data     = $response['response']['data'][0];
 
-            $json_data = json_encode($article);
-
-            $post = file_get_contents('http://localhost/rest/articles',null,stream_context_create(array(
-                        'http' => array(
-                        'protocol_version' => 1.1,
-                        'user_agent'       => 'PHPExample',
-                        'method'           => 'POST',
-                        'header'           => "Content-type: application/json\r\n".
-                              "Connection: close\r\n" .
-                              "Content-length: " . strlen($json_data) . "\r\n",
-                        'content'          => $json_data,
-                ),
-            )));
-
-            if ($post) {
-                echo $post;
-            } else {
-                echo "POST failed";
-            }
+echo $response;
+echo $errors;
+echo $data
+        
         ?>
           </div>
       </div>
