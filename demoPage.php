@@ -41,7 +41,7 @@ and open the template in the editor.
                   <div class="input-group-prepend">
                     <span class="input-group-text">Your message</span>
                   </div>
-                  <textarea  class="form-control" rows="4" required="required" data-error="Please, leave us a message." name="message" ><?php if(isset($_POST['message'])) { echo htmlentities ($_POST['message']); }?></textarea>
+                  <textarea  class="form-control" rows="4" required="required" data-error="Please, leave us a message." name="message" ><?php if(isset($_GET['textMsg'])) { echo htmlentities ($_GET['textMsg']); }?></textarea>
                   
                 </div>
               </div>
@@ -181,7 +181,8 @@ $_SESSION['message'] = htmlspecialchars($_POST['message']);
 #}
 #$_COOKIE["MyCookie_dep"] = $dep_scr;
 #echo implode(', ', $response['dep_pos']);
-header("Location: ./demoPage.php?contact=mailsent");
+$textUrl = "Location: ./demoPage.php?contact=mailsent&textMsg=" . $_POST['message'];
+header($textUrl);
 #header("Refresh:0");
 
             }
