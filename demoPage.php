@@ -7,6 +7,45 @@ and open the template in the editor.
 <html>
     <head>
 
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+           
+         var cookies = document.cookie.split(";").
+    map(function(el){ return el.split("="); }).
+    reduce(function(prev,cur){ prev[cur[0]] = cur[1];return prev },{});
+    
+        //alert(Sring(cookies))
+
+var anxScr = cookies["MyCookie_anx"];
+var depScr = cookies["MyCookie_dep"];
+alert(Sring(cookies))
+
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Depression', parseFloat(depScr)],
+          ['Anorexia', parseFloat(anxScr)],
+          ['Suicide', 0]
+        ]);
+
+        var options = {
+          width: 400, height: 120,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        
+      }
+    </script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,6 +53,7 @@ and open the template in the editor.
     <!-- This page use bootstrap and a custom css file in which you can change things -->
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="./css/template_full.css">
+    
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -28,11 +68,33 @@ and open the template in the editor.
       <!-- The background image is located in the css attached to this file -->
       <div class="sectionShowcase backgroundImg"> 
           <div class="centeredFlexbox">
-        <h2 class="text-uppercase font-weight-bold text-center">Don't Do it! DEMO</h2>
-        <?php
-        // put your code here
+              <h2 class="text-uppercase font-weight-bold text-center">Don't Do it!</h2> 
+              <h2 class="text-uppercase font-weight-bold text-center"> DEMO</h2>
+        <form id="contact-form" method="post" actrin= "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" role="form">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Your message</span>
+                  </div>
+                  <textarea  class="form-control" rows="4" required="required" data-error="Please, leave us a message." name="message" ><?php if(isset($_POST['message'])) { echo htmlentities ($_POST['message']); }?></textarea>
+                  
+                </div>
+              </div>
+                
+             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                <button type="submit" name="submit" class="btn btn-primary btn-lg">Send message</button>
+              
+            </div>
+                <?php if(isset($_POST['message'])) { ?>
+                 <div id="chart_div" style="width: 400px; height: 120px;"></div>
+                 <?php } ?>
+        </form>
+
         
- function callAPI($method, $url, $data){
+        <?php
+        
+         function callAPI($method, $url, $data){
    $curl = curl_init();
    switch ($method){
       case "POST":
@@ -59,47 +121,131 @@ and open the template in the editor.
    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
    // EXECUTE:
    $result = curl_exec($curl);
-   echo $result;
+   #echo $result;
    if(!$result){die("Connection Failure");}
    curl_close($curl);
    return $result;
  }
-    $data_array =  array(
-      "data"        => "MY MACHINE Rockstar should make freemode events that are car shows. When you enter the area, your car can't be blown uo. Everyone who participates could vote on the best car. Winner could earn RP and like 25k. It would be dope",
+ 
+        //////////////////////////////
+        if (isset($_POST['submit'])) {
+            $text_toProcess = htmlspecialchars($_POST['message']);
+            if (empty($text_toProcess)) {
+                     header("Location: ./demoPage.php?contact=empty");
+                    exit();
+            }
+            else{
+                $data_array =  array(
+      "data"        => $text_toProcess,
     );
-#$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
+$make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
    ###############################################################
    
-    $data = json_encode($data_array);
-    $url = 'http://advanse.lirmm.fr:5000/predict';
-   echo "start here..1"; 
-   $curl = curl_init();
-   echo "start here..---1.1";
-   curl_setopt($curl, CURLOPT_POST, 1);
-   curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-   curl_setopt($curl, CURLOPT_URL, $url);
-   curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-      'APIKEY: 111111111111111111111',
-      'Content-Type: application/json',
-   ));
-   echo "start here..2";
-   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+#    $data = json_encode($data_array);
+#    $url = 'http://advanse.lirmm.fr:5000/predict';
+#   echo "start here..1"; 
+#   $curl = curl_init();
+#   echo "start here..---1.1";
+#   curl_setopt($curl, CURLOPT_POST, 1);
+#   curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+#   curl_setopt($curl, CURLOPT_URL, $url);
+#   curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+#      'APIKEY: 111111111111111111111',
+#      'Content-Type: application/json',
+#   ));
+#   echo "start here..2";
+#   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+#   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
    // EXECUTE:
-   echo "start here..3";
-   $result = curl_exec($curl);
-   echo $result;
-   if(!$result){die("Connection Failure");}
-   curl_close($curl);
+#   echo "start here..3";
+#   $result = curl_exec($curl);
+   #echo $result;
+
+#   if(!$result){die("Connection Failure");}
+ #  curl_close($curl);
     #############################################################
 $response = json_decode($make_call, true);
-$errors   = $response['response']['errors'];
-$data     = $response['response']['data'][0];
+#$errors   = $response['response']['errors'];
+#$data     = $response['response']['data'][0];
+$past = time() - 3600;
+#foreach ( $_COOKIE as $key => $value )
+#{
+#    echo $key;
+#    echo "<br>";
+#    echo $value;
+#    setcookie( $key, $value, 1, '/' );
+#    setcookie( $key, FALSE );
+ echo "<br>";
+#echo '<br>';
+#echo implode(', ', $response['anx_pos']) ;
+#echo round($response['anx_pos'][0] * 100, 1);
+$anx_scr = round($response['anx_pos'][0] * 100, 1);
+echo $anx_scr;
+echo '<br>';
+setcookie("MyCookie_anx", $anx_scr,time()+ (60*15),"/");
+if (isset($_COOKIE['MyCookie_anx'])) {
+    echo "ANX yes it was set";
+    unset($_COOKIE['MyCookie_anx']); 
+    #return true;
+}
+$_COOKIE["MyCookie_anx"] = $anx_scr;
+#echo round($response['dep_pos'][0] * 100, 1);
+$dep_scr = round($response['dep_pos'][0] * 100, 1);
+echo $dep_scr;
+setcookie("MyCookie_dep", $dep_scr,time()+ (60*15),"/");
+if (isset($_COOKIE['MyCookie_dep'])) {
+    echo "DEP yes it was set";
+    unset($_COOKIE['MyCookie_dep']); 
+    #return true;
+}
+$_COOKIE["MyCookie_dep"] = $dep_scr;
+#echo implode(', ', $response['dep_pos']);
+#header("Location: ./demoPage.php?contact=mailsent");
 
-echo $response;
-echo $errors;
-echo $data
+            }
+            
+        }
         
+        // put your code here
+        
+
+    
+//////////////////////////////////////////////////////////////////////////////
+         function phpAlert($message) {
+      echo '<script type="text/javascript">';
+      echo 'alert("'.$message.'");';
+      #echo 'window.location.href = "template_full.php#projectContact";';
+      echo '</script>';
+    }
+
+    if (!isset($_GET['contact'])) {
+      exit();
+    }
+    else {
+      $contactCheck = $_GET['contact'];
+
+      if ($contactCheck == "error") {
+        phpAlert('Something went wrong! Try again!');
+        exit();
+      }
+      elseif ($contactCheck == "empty") {
+        phpAlert('You did not fill in all the fileds!');
+        exit();
+      }
+      elseif ($contactCheck == "char") {
+        phpAlert('You used invalid characters!');
+        exit();
+      }
+      elseif ($contactCheck == "invalidemail") {
+        phpAlert('Your email address is invalid!');
+        exit();
+      }
+      elseif ($contactCheck == "mailsent") {
+        phpAlert('Mail sent!');
+        exit();
+      }
+    }
+
         ?>
           </div>
       </div>
