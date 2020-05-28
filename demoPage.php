@@ -4,48 +4,12 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+    <?php
+        session_start();
+    ?> 
 <html>
     <head>
-
-   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-   <script type="text/javascript">
-      google.charts.load('current', {'packages':['gauge']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-           
-         var cookies = document.cookie.split(";").
-    map(function(el){ return el.split("="); }).
-    reduce(function(prev,cur){ prev[cur[0]] = cur[1];return prev },{});
-    
-        //alert(Sring(cookies))
-
-var anxScr = cookies["MyCookie_anx"];
-var depScr = cookies["MyCookie_dep"];
-alert(Sring(cookies))
-
-
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Depression', parseFloat(depScr)],
-          ['Anorexia', parseFloat(anxScr)],
-          ['Suicide', 0]
-        ]);
-
-        var options = {
-          width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-
-        
-      }
-    </script>
+       
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -70,7 +34,7 @@ alert(Sring(cookies))
           <div class="centeredFlexbox">
               <h2 class="text-uppercase font-weight-bold text-center">Don't Do it!</h2> 
               <h2 class="text-uppercase font-weight-bold text-center"> DEMO</h2>
-        <form id="contact-form" method="post" actrin= "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" role="form">
+        <form id="contact-form" method="post" role="form">
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
                 <div class="input-group">
@@ -86,12 +50,24 @@ alert(Sring(cookies))
                 <button type="submit" name="submit" class="btn btn-primary btn-lg">Send message</button>
               
             </div>
-                <?php if(isset($_POST['message'])) { ?>
-                 <div id="chart_div" style="width: 400px; height: 120px;"></div>
-                 <?php } ?>
-        </form>
+       </div>
+                
+                
+        </form> 
+              
+              <br><br>
 
-        
+               
+                 <div id="chart_div" style="width: 400px; height: 120px;"></div>
+
+      
+
+                  </div>
+      </div>
+      </section>
+    
+
+       
         <?php
         
          function callAPI($method, $url, $data){
@@ -175,32 +151,38 @@ $past = time() - 3600;
 #    echo $value;
 #    setcookie( $key, $value, 1, '/' );
 #    setcookie( $key, FALSE );
- echo "<br>";
+ #echo "<br>";
 #echo '<br>';
 #echo implode(', ', $response['anx_pos']) ;
 #echo round($response['anx_pos'][0] * 100, 1);
+
 $anx_scr = round($response['anx_pos'][0] * 100, 1);
 echo $anx_scr;
 echo '<br>';
-setcookie("MyCookie_anx", $anx_scr,time()+ (60*15),"/");
-if (isset($_COOKIE['MyCookie_anx'])) {
-    echo "ANX yes it was set";
-    unset($_COOKIE['MyCookie_anx']); 
-    #return true;
-}
-$_COOKIE["MyCookie_anx"] = $anx_scr;
+$_SESSION['anx_scr'] = $anx_scr;
+#setcookie("MyCookie_anx", $anx_scr,time()+ (60*15),"/");
+#if (isset($_COOKIE['MyCookie_anx'])) {
+#    echo "ANX yes it was set";
+#    unset($_COOKIE['MyCookie_anx']); 
+#    #return true;
+#}
+#$_COOKIE["MyCookie_anx"] = $anx_scr;
 #echo round($response['dep_pos'][0] * 100, 1);
 $dep_scr = round($response['dep_pos'][0] * 100, 1);
 echo $dep_scr;
-setcookie("MyCookie_dep", $dep_scr,time()+ (60*15),"/");
-if (isset($_COOKIE['MyCookie_dep'])) {
-    echo "DEP yes it was set";
-    unset($_COOKIE['MyCookie_dep']); 
-    #return true;
-}
-$_COOKIE["MyCookie_dep"] = $dep_scr;
+$_SESSION['dep_scr'] = $dep_scr;
+
+$_SESSION['message'] = htmlspecialchars($_POST['message']);
+#setcookie("MyCookie_dep", $dep_scr,time()+ (60*15),"/");
+#if (isset($_COOKIE['MyCookie_dep'])) {
+#    echo "DEP yes it was set";
+#    unset($_COOKIE['MyCookie_dep']); 
+#    #return true;
+#}
+#$_COOKIE["MyCookie_dep"] = $dep_scr;
 #echo implode(', ', $response['dep_pos']);
-#header("Location: ./demoPage.php?contact=mailsent");
+header("Location: ./demoPage.php?contact=mailsent");
+#header("Refresh:0");
 
             }
             
@@ -241,14 +223,61 @@ $_COOKIE["MyCookie_dep"] = $dep_scr;
         exit();
       }
       elseif ($contactCheck == "mailsent") {
-        phpAlert('Mail sent!');
+        #phpAlert('Mail sent!');
+      ?>
+    
+
+    
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  
+   google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+           
+        var depScr = <?php echo $_SESSION['dep_scr']?>;
+       var anxScr = <?php echo $_SESSION['anx_scr']?>;
+       
+      
+    
+        //alert(Sring(cookies))
+
+//var anxScr = cookies["MyCookie_anx"];
+//var depScr = cookies["MyCookie_dep"];
+//alert(Sring(cookies))
+
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Depression', parseFloat(depScr)],
+          ['Anorexia', parseFloat(anxScr)],
+          ['Suicide', 0]
+        ]);
+
+        var options = {
+          width: 400, height: 120,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        
+      }
+    </script>               
+                 
+<?php  
+    
         exit();
       }
     }
 
         ?>
-          </div>
-      </div>
-      </section>
+
     </body>
+
 </html>
