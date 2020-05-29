@@ -5,6 +5,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
     <?php
+        @ob_start();
         session_start();
     ?> 
 <html>
@@ -39,7 +40,7 @@ and open the template in the editor.
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Your message</span>
+                    <span class="input-group-text">User post</span>
                   </div>
                   <textarea  class="form-control" rows="4" required="required" data-error="Please, leave us a message." name="message" ><?php if(isset($_GET['textMsg'])) { echo htmlentities ($_GET['textMsg']); }?></textarea>
                   
@@ -47,7 +48,7 @@ and open the template in the editor.
               </div>
                 
              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                <button type="submit" name="submit" class="btn btn-primary btn-lg">Send message</button>
+                <button type="submit" name="submit" class="btn btn-primary btn-lg">Score this post</button>
               
             </div>
        </div>
@@ -181,7 +182,12 @@ $_SESSION['message'] = htmlspecialchars($_POST['message']);
 #}
 #$_COOKIE["MyCookie_dep"] = $dep_scr;
 #echo implode(', ', $response['dep_pos']);
-$textUrl = "Location: ./demoPage.php?contact=mailsent&textMsg=" . $_POST['message'];
+$query = array(
+    'st' => "success",
+    'textMsg' => $_POST['message'],
+);
+#$textUrl = "Location: ./demoPage.php?contact=mailsent&textMsg=" . $_POST['message'];
+$textUrl = "Location: ./demoPage.php?". http_build_query($query);
 header($textUrl);
 #header("Refresh:0");
 
@@ -201,11 +207,11 @@ header($textUrl);
       echo '</script>';
     }
 
-    if (!isset($_GET['contact'])) {
+    if (!isset($_GET['st'])) {
       exit();
     }
     else {
-      $contactCheck = $_GET['contact'];
+      $contactCheck = $_GET['st'];
 
       if ($contactCheck == "error") {
         phpAlert('Something went wrong! Try again!');
@@ -223,7 +229,7 @@ header($textUrl);
         phpAlert('Your email address is invalid!');
         exit();
       }
-      elseif ($contactCheck == "mailsent") {
+      elseif ($contactCheck == "success") {
         #phpAlert('Mail sent!');
       ?>
     
@@ -249,6 +255,13 @@ header($textUrl);
 //alert(Sring(cookies))
 
 
+        var data_init = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Depression', 0],
+          ['Anorexia', 0],
+          ['Suicide', 0]
+        ]);
+        
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
           ['Depression', parseFloat(depScr)],
@@ -258,14 +271,23 @@ header($textUrl);
 
         var options = {
           width: 400, height: 120,
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
-          minorTicks: 5
+          redFrom: 85, redTo: 100,
+          yellowFrom:65, yellowTo: 85,
+          minorTicks: 5,
+          animation: {
+              startup: true,
+                duration: 1000,
+
+               }
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
 
-        chart.draw(data, options);
+      
+    chart.draw(data_init, options);
+    chart.draw(data, options);
+        
+        
 
         
       }
