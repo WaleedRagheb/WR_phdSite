@@ -155,4 +155,11 @@ footer {
   background-color:#007bff;
   border-color:#007bff;
 }
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
 /* ------------------------------------------------------------ */

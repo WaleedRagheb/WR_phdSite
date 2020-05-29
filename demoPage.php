@@ -26,6 +26,28 @@ and open the template in the editor.
 
     <!-- The following allows to use icons from font awesome -->
     <script src="https://kit.fontawesome.com/222ebe9af0.js" crossorigin="anonymous"></script>
+    <script type="text/javascript"> 
+         
+          
+      function checkinput() // submit handler
+{
+   
+    $("#formS").hide(); 
+    $("#formS2").show(); 
+    
+    
+  document.getElementById('loadingGif').style.display = "block";
+ 
+  //document.getElementById('vis').style.display = "none";
+  document.getElementById('vis').style.visibility = "hidden";
+
+  //$("vis").hide(); 
+  
+
+}
+         
+
+        </script>
   </head>
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
         <section id="projectShowcase">
@@ -33,9 +55,11 @@ and open the template in the editor.
       <!-- The background image is located in the css attached to this file -->
       <div class="sectionShowcase backgroundImg"> 
           <div class="centeredFlexbox">
-              <h2 class="text-uppercase font-weight-bold text-center">Don't Do it!</h2> 
-              <h2 class="text-uppercase font-weight-bold text-center"> DEMO</h2>
-        <form id="contact-form" method="post" role="form">
+              <h1 class="text-uppercase font-weight-bold text-center">Don't Do it!</h1> 
+              <h4 class="text-center"> At-risk users behaviors modeling on social networks </h4>
+              <br>
+              <h2 style="text-align: center; color: white" >Demo</h2>
+              <form id="contact-form" method="post" role="form" onsubmit="checkinput()">
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
                 <div class="input-group">
@@ -48,21 +72,25 @@ and open the template in the editor.
               </div>
                 
              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                <button type="submit" name="submit" class="btn btn-primary btn-lg">Score this post</button>
+                 <button            type="submit" name="submit" class="btn btn-primary btn-lg" id="formS" >Score this post</button>
+                 <button  disabled  type="submit" name="submit" class="btn btn-primary btn-lg" id="formS2" style="display: none"><span class="glyphicon glyphicon-refresh"></span> Score this post </button>
+                 <div id="loadingGif" style="display:none"><img src="content/logos/loading-7.gif" ></div>
               
             </div>
        </div>
                 
-                
-        </form> 
+                </form>   
+    
               
-              <br><br>
-
-               
+              <br>
+              <div id="vis" style=" display:compact"> 
+<?php if(isset($_GET['textMsg'])) { ?>
+                <p style="text-align: center;">Scores:</p>
                  <div id="chart_div" style="width: 400px; height: 120px;"></div>
 
-      
-
+<?php } ?>
+              </div>
+                
                   </div>
       </div>
       </section>
@@ -115,6 +143,7 @@ and open the template in the editor.
                 $data_array =  array(
       "data"        => $text_toProcess,
     );
+                set_time_limit(300);
 $make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
    ###############################################################
    
@@ -233,7 +262,7 @@ header($textUrl);
         #phpAlert('Mail sent!');
       ?>
     
-
+       
     
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
