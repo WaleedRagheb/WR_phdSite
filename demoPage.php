@@ -86,7 +86,7 @@ and open the template in the editor.
               <div id="vis" style=" display:compact"> 
 <?php if(isset($_GET['textMsg'])) { ?>
                 <p style="text-align: center;">Scores:</p>
-                 <div id="chart_div" style="width: 400px; height: 120px;"></div>
+                 <div id="chart_div" align='center' style="width: 400px; height: 120px; display: inline-block; margin: 0 auto;"></div>
 
 <?php } ?>
               </div>

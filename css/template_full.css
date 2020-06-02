@@ -162,4 +162,9 @@ button[disabled]{
   background-color: #cccccc;
   color: #666666;
 }
+
+div.chart_div table {
+    width: auto;
+    margin: 0 auto !important;
+}
 /* ------------------------------------------------------------ */
