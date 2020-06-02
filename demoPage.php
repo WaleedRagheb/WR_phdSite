@@ -82,9 +82,10 @@ and open the template in the editor.
                 </form>   
     
               
-              <br>
+       
               <div id="vis" style=" display:compact"> 
 <?php if($_GET['st'] == "success") { ?>
+                         <br>
                 <p style="text-align: center;">Scores:</p>
                  <div id="chart_div" align='center' style="width: 400px; height: 120px; display: inline-block; margin: 0 auto;"></div>
 
