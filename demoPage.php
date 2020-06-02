@@ -57,7 +57,7 @@ and open the template in the editor.
           <div class="centeredFlexbox">
               <h1 class="text-uppercase font-weight-bold text-center">Don't Do it!</h1> 
               <h4 class="text-center"> At-risk users behaviors modeling on social networks </h4>
-              <br>
+          
               <h2 style="text-align: center; color: white" >Demo</h2>
               <form id="contact-form" method="post" role="form" onsubmit="checkinput()">
             <div class="row justify-content-center">
