@@ -84,11 +84,20 @@ and open the template in the editor.
               
               <br>
               <div id="vis" style=" display:compact"> 
-<?php if(isset($_GET['textMsg'])) { ?>
+<?php if($_GET['st'] == "success") { ?>
                 <p style="text-align: center;">Scores:</p>
                  <div id="chart_div" align='center' style="width: 400px; height: 120px; display: inline-block; margin: 0 auto;"></div>
 
 <?php } ?>
+                 
+                 <?php if($_GET['st'] == "connFail") { ?>
+                 <div align='center'>
+                     <img src="content/logos/error--v1.png" style="display: block;  margin-left: auto;  margin-right: auto;   width: 10%;" >
+                     <h4>We&rsquo;ll be back soon!</h4>
+                     <p style="font-size:120%;">Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to, you can always <a href="template_full.php#projectContact">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
+                       
+                </div>
+                 <?php } ?>
               </div>
                 
                   </div>
@@ -127,7 +136,7 @@ and open the template in the editor.
    // EXECUTE:
    $result = curl_exec($curl);
    #echo $result;
-   if(!$result){die("Connection Failure");}
+   #if(!$result){die("Connection Failure");}
    curl_close($curl);
    return $result;
  }
@@ -145,6 +154,16 @@ and open the template in the editor.
     );
                 set_time_limit(300);
 $make_call = callAPI('POST', 'http://advanse.lirmm.fr:5000/predict', json_encode($data_array));
+if(!$make_call){ 
+    $query = array(
+    'st' => "connFail",
+    'textMsg' => $_POST['message'],
+    );
+    
+    $textUrl = "Location: ./demoPage.php?". http_build_query($query);
+    header($textUrl);
+    die("");
+}
    ###############################################################
    
 #    $data = json_encode($data_array);
