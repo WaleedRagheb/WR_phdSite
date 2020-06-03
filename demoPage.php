@@ -206,7 +206,7 @@ $past = time() - 3600;
 #echo implode(', ', $response['anx_pos']) ;
 #echo round($response['anx_pos'][0] * 100, 1);
 
-$anx_scr = round($response['anx_pos'][0] * 100, 1);
+$anx_scr = round($response['anorexia_pos'][0] * 100, 1);
 echo $anx_scr;
 echo '<br>';
 $_SESSION['anx_scr'] = $anx_scr;
@@ -218,7 +218,7 @@ $_SESSION['anx_scr'] = $anx_scr;
 #}
 #$_COOKIE["MyCookie_anx"] = $anx_scr;
 #echo round($response['dep_pos'][0] * 100, 1);
-$dep_scr = round($response['dep_pos'][0] * 100, 1);
+$dep_scr = round($response['depression_pos'][0] * 100, 1);
 echo $dep_scr;
 $_SESSION['dep_scr'] = $dep_scr;
 
